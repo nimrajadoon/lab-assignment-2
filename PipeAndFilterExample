@@ -11,3 +11,54 @@ public class PipeAndFilterExample {
         System.out.println("Inventory: " + inventoryFilter.getInventory()); // Inventory Filter 
     } 
 }
+
+Filter: InventoryFilter 
+ 
+import java.util.HashMap; 
+import java.util.Map; 
+ 
+public class InventoryFilter { 
+    private Map<String, Integer> inventory = new HashMap<>(); 
+ 
+    public InventoryFilter() { 
+        inventory.put("item1", 10); 
+        inventory.put("item2", 5); 
+    } 
+ 
+    public boolean reduceStock(String item, int quantity) { 
+        if (inventory.containsKey(item) && inventory.get(item) >= quantity) { 
+            inventory.put(item, inventory.get(item) - quantity); 
+            return true; 
+        } 
+        return false; 
+    } 
+ 
+    public Map<String, Integer> getInventory() { 
+        return inventory; 
+    } 
+} 
+Filter: OrderFilter 
+ 
+public class OrderFilter { 
+    public String placeOrder(InventoryFilter inventoryFilter, String item, int quantity) { 
+        if (inventoryFilter.reduceStock(item, quantity)) { 
+            return "Order placed successfully"; 
+        } 
+        return "Order failed"; 
+    } 
+} 
+Filter: SearchFilter 
+java 
+Copy code 
+public class SearchFilter { 
+    private InventoryFilter inventoryFilter; 
+ 
+    public SearchFilter(InventoryFilter inventoryFilter) { 
+        this.inventoryFilter = inventoryFilter; 
+    } 
+ 
+    public String searchItem(String item) { 
+        return inventoryFilter.getInventory().containsKey(item) ?  
+               "Available: " + inventoryFilter.getInventory().get(item) : "Item not found"; 
+    } 
+}
