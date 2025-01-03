@@ -1,0 +1,13 @@
+public class PipeAndFilterExample { 
+    public static void main(String[] args) { 
+        // Create filters 
+        InventoryFilter inventoryFilter = new InventoryFilter(); 
+        OrderFilter orderFilter = new OrderFilter(); 
+        SearchFilter searchFilter = new SearchFilter(inventoryFilter); 
+ 
+        // Pipe data through filters 
+        System.out.println(orderFilter.placeOrder(inventoryFilter, "item1", 2)); // Order Filter 
+        System.out.println(searchFilter.searchItem("item1")); // Search Filter 
+        System.out.println("Inventory: " + inventoryFilter.getInventory()); // Inventory Filter 
+    } 
+}
