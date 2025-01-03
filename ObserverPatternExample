@@ -1,0 +1,114 @@
+import java.util.HashMap; 
+import java.util.Map; 
+import java.util.ArrayList; 
+import java.util.List; 
+ 
+public class InventorySubject { 
+    private Map<String, Integer> inventory = new HashMap<>(); 
+    private List<Observer> observers = new ArrayList<>(); 
+ 
+    public InventorySubject() { 
+        inventory.put("item1", 10); 
+        inventory.put("item2", 5); 
+    } 
+ 
+    public void addObserver(Observer observer) { 
+        observers.add(observer); 
+    } 
+ 
+    public void removeObserver(Observer observer) { 
+        observers.remove(observer); 
+    } 
+ 
+    public void notifyObservers() { 
+        for (Observer observer : observers) { 
+            observer.update(inventory); 
+        } 
+    } 
+ 
+    public boolean reduceStock(String item, int quantity) { 
+        if (inventory.containsKey(item) && inventory.get(item) >= quantity) { 
+            inventory.put(item, inventory.get(item) - quantity); 
+            notifyObservers(); // Notify observers of the change 
+            return true; 
+        } 
+        return false; 
+    } 
+ 
+     
+public Map<String, Integer> getInventory() { 
+        return inventory; 
+    } 
+} 
+Observer: OrderObserver 
+ 
+public class OrderObserver implements Observer { 
+    private String orderStatus = "Order not placed"; 
+ 
+    public String getOrderStatus() { 
+        return orderStatus; 
+    } 
+ 
+    @Override 
+    public void update(Map<String, Integer> inventory) { 
+        // Handle inventory change 
+        orderStatus = "Order processed with updated inventory"; 
+    } 
+ 
+    public String placeOrder(InventorySubject inventorySubject, String item, int quantity) { 
+        if (inventorySubject.reduceStock(item, quantity)) { 
+            return "Order placed successfully"; 
+        } 
+        return "Order failed"; 
+    } 
+} 
+Observer: SearchObserver 
+ 
+public class SearchObserver implements Observer { 
+    private String searchStatus = "Searching..."; 
+ 
+    public String getSearchStatus() { 
+        return searchStatus; 
+    } 
+ 
+    @Override 
+    public void update(Map<String, Integer> inventory) { 
+        // Handle inventory change 
+        searchStatus = "Inventory updated"; 
+    } 
+ 
+    public String searchItem(InventorySubject inventorySubject, String item) { 
+        return inventorySubject.getInventory().containsKey(item) ?  
+               "Available: " + inventorySubject.getInventory().get(item) : "Item not found"; 
+    } 
+} 
+Observer Interface 
+ 
+interface Observer { 
+    void update(Map<String, Integer> inventory); 
+} 
+Main Observer Pattern Orchestration 
+ 
+public class ObserverPatternExample { 
+    public static void main(String[] args) { 
+        // Create the subject (Inventory) 
+        InventorySubject inventorySubject = new InventorySubject(); 
+ 
+        // Create observers 
+        OrderObserver orderObserver = new OrderObserver(); 
+        SearchObserver searchObserver = new SearchObserver(); 
+ 
+        // Register observers 
+        inventorySubject.addObserver(orderObserver); 
+        inventorySubject.addObserver(searchObserver); 
+ 
+        // Place an order (Observer will be notified of changes) 
+        System.out.println(orderObserver.placeOrder(inventorySubject, "item1", 2)); 
+        System.out.println(searchObserver.searchItem(inventorySubject, "item1")); 
+ 
+        // View inventory and observe changes 
+        System.out.println("Inventory: " + inventorySubject.getInventory()); 
+        System.out.println("Order Status: " + orderObserver.getOrderStatus()); 
+        System.out.println("Search Status: " + searchObserver.getSearchStatus()); 
+    } 
+} 
