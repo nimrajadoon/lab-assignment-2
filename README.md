@@ -32,3 +32,5 @@ The transition from a monolithic e-commerce system to microservices is demonstra
 - **Fault Isolation**: Failures in one service don't affect others.
 
 This repository demonstrates the power of microservices through modular designs, enhancing scalability, maintainability, and fault tolerance.
+## Video Demonstration
+https://drive.google.com/drive/folders/1JkhzrCqKa2SgFfjrRYBB9MmgNdJ0S1mX?usp=sharing
